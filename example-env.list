@@ -1,0 +1,10 @@
+# Template for setting DB connection environment variables for Docker
+# Duplicate and move to config folder as config/env.list, create config folder if it doesn't already exist
+# Ensure any additions that don't follow the format VARIABLE=value are preceded by a hash to comment them out
+
+MYSQL_ROOT_PASSWORD=root_password
+MYSQL_DATABASE=name
+MYSQL_USER=username
+MYSQL_PASSWORD=database_password
+HOST=host
+EXPORT_DIR=exports
