@@ -5,12 +5,15 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.zip.ZipInputStream;
 
 @Service
 public class DbConnectionService {
@@ -29,10 +32,9 @@ public class DbConnectionService {
         return mysqlExportService.getGeneratedZipFile();
     }
 
-    // Return unzipped db file
-//    public File getDbExportFile() {
-//        return null;
-//    }
+    public ZipInputStream getDbExportFile() throws FileNotFoundException {
+        return new ZipInputStream(new FileInputStream(getDbExportZipFile()));
+    }
 
     public boolean saveExportedDbFile() {
         Path file = getDbExportZipFile().toPath();

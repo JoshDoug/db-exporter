@@ -18,7 +18,7 @@ public class DBExporter {
 
     /**
      * Scheduled export for the top of every hour
-     * @documentation https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
+     * https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
      */
     @Scheduled(cron = "0 0 * * * *")
     private void saveExportedDbFile() {
