@@ -54,7 +54,7 @@ public class ExportController {
                 .body(resource);
     }
 
-    @GetMapping(path = "v2", produces = "application/zip")
+    @GetMapping(path = "export/download", produces = "application/zip")
     public ResponseEntity<InputStreamResource> getDbExportFile() throws FileNotFoundException {
         File file = this.dbConnectionService.getDbExportZipFile();
         FileInputStream fis = new FileInputStream(file);
@@ -71,6 +71,19 @@ public class ExportController {
         httpHeaders.add("Content-Disposition", "attachment; filename=" + file.getName());
 
         return new ResponseEntity<>(new InputStreamResource(fis), httpHeaders, HttpStatus.CREATED);
+    }
+
+    // This really doesn't seem the right way to do this
+    @GetMapping(path = "export/volume")
+    public ResponseEntity<?> exportToVolume() {
+
+        boolean success = dbConnectionService.saveExportedDbFile();
+
+        if(success) {
+            return ResponseEntity.ok().body(HttpStatus.CREATED);
+        } else {
+            return ResponseEntity.ok().body(HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
 }

@@ -22,3 +22,9 @@ Connecting a container to a network:
                                   --publish 8080:80 \
                                   nginx:latest`
 * connect network to a running container: `docker network connect ev-test-net db-exporter-app`
+
+Running named container with port mappings, env.list config, network bridge connection, volume share, autoremove for tagged image:
+
+```bash
+docker run --name db-exporter-app -p 8080:8080 --env-file config/env.list  --network ev-test-net -v `pwd`/external:/exports --rm -d db-exporter:0.0.5
+```

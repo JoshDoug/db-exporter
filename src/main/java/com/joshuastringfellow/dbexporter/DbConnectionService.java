@@ -3,8 +3,12 @@ package com.joshuastringfellow.dbexporter;
 import com.smattme.MysqlExportService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -12,6 +16,7 @@ import java.util.Properties;
 public class DbConnectionService {
 
     private Properties connectionDetails;
+    private Path exportDir;
 
     public File getDbExportZipFile() {
         MysqlExportService mysqlExportService = new MysqlExportService(getDatabaseConnectionDetails());
@@ -28,6 +33,27 @@ public class DbConnectionService {
 //    public File getDbExportFile() {
 //        return null;
 //    }
+
+    public boolean saveExportedDbFile() {
+        Path file = getDbExportZipFile().toPath();
+        if(Files.isReadable(file) && Files.isDirectory(exportDir)) {
+            Path target = Paths.get(this.exportDir.toString(), file.getFileName().toString());
+            try {
+                Files.move(file, target);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @PostConstruct
+    private void setExportDirectory() {
+        // Grab the env set in the env.list for the shared volume
+        this.exportDir = Paths.get("/" + System.getenv("EXPORT_DIR") + "/");
+    }
 
     private Properties getDatabaseConnectionDetails() {
         if (connectionDetails != null) {
