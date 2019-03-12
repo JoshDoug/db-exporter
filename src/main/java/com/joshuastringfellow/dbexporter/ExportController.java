@@ -101,7 +101,7 @@ public class ExportController {
 
     // This really doesn't seem the right way to do this
     @GetMapping(path = "export/volume")
-    public ResponseEntity<?> exportToVolume() {
+    public ResponseEntity<HttpStatus> exportToVolume() {
 
         boolean success = dbConnectionService.saveExportedDbFile();
 

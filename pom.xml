@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.joshuastringfellow</groupId>
     <artifactId>db-exporter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2</version>
     <name>db-exporter</name>
     <description>Programmatically export linked db</description>
 

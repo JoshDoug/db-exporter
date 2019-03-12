@@ -1,6 +1,8 @@
 package com.joshuastringfellow.dbexporter;
 
 import com.smattme.MysqlExportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -12,11 +14,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Properties;
 import java.util.zip.ZipInputStream;
 
+/**
+ * Class for getting a connection to the database...and also saving files now, should probably be split up or renamed
+ *  - handles getting DB connection details from environment variables
+ *  - sets up handle to MysqlExportService
+ *  - also currently handles saving zip files, downloading zip and sql files
+ *
+ * TODO - refactor logic or rename service
+ */
 @Service
 public class DbConnectionService {
+
+    private final Logger logger = LoggerFactory.getLogger(DbConnectionService.class);
 
     private Properties connectionDetails;
     private Path exportDir;
@@ -38,11 +51,13 @@ public class DbConnectionService {
 
     public boolean saveExportedDbFile() {
         Path file = getDbExportZipFile().toPath();
-        if(Files.isReadable(file) && Files.isDirectory(exportDir)) {
+        if (Files.isReadable(file) && Files.isDirectory(exportDir)) {
             Path target = Paths.get(this.exportDir.toString(), file.getFileName().toString());
             try {
                 Files.move(file, target);
+                logger.info("Saved file " + file.getFileName() + " at " + LocalDateTime.now());
             } catch (IOException e) {
+                logger.warn("Failed to save file file " + file.getFileName() + " at " + LocalDateTime.now());
                 e.printStackTrace();
                 return false;
             }
