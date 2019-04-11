@@ -29,4 +29,10 @@ Running named container with port mappings, env.list config, network bridge conn
 docker run --name db-exporter-app -p 8080:8080 --env-file config/env.list  --network ev-test-net -v `pwd`/external:/exports --rm -d db-exporter:0.0.5
 ```
 
+Building image:
+
+```bash
+docker build -t db-exporter-app:0.0.2
+```
+
 Go to `hostname:8080/export/download` to download a zipped db export file, where hostname and the ports depend on the mappings used for the container instance.
